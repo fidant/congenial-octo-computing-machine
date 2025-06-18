@@ -1,4 +1,5 @@
 #Script needs RSAT:Active Directory Domain Services and Lightweight Directory Services Tools to function
+#Change dc line 10 and 35
 $secpass = Read-Host "Password" -AsSecureString
 Import-Csv newAccounts.csv |
 ForEach-Object {
@@ -6,7 +7,7 @@ ForEach-Object {
         $name = "$($_.LastName) $($_.FirstName)"
         $firstName = $_.FirstName
         $lastName = $_.LastName
-        $ouPath = "OU=Staff,OU=$($_.Site),OU=Client Users,OU=User Accounts,dc=bsin,dc=k12,dc=nm,dc=us"
+        $ouPath = "OU=Staff,OU=$($_.Site),OU=Client Users,OU=User Accounts,dc=company,dc=local"
         $remoteServer = $($_.Server)
         
 
@@ -32,7 +33,7 @@ ForEach-Object {
         
         New-ADUser -GivenName $($_.FirstName) -Surname $($_.LastName) `
             -Name $name -SamAccountName $samAccountName `
-            -UserPrincipalName "$samAccountName@bsin.k12.nm.us" `
+            -UserPrincipalName "$samAccountName@company.local" `
             -AccountPassword $secpass -Path $ouPath  `
             -Enabled:$true
         
